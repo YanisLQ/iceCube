@@ -1,13 +1,20 @@
-import { StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, TouchableOpacity, Button, Dimensions } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 export default function QrScanner({ navigation }: RootStackScreenProps<'QrScanner'>) {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+    const [data, setData] = useState(null);
 
+
+
+    console.log(windowWidth, windowHeight)
     const getBarCodeScannerPermissions = () => {
         ( async () => {
             const status = await BarCodeScanner.requestPermissionsAsync();
@@ -20,14 +27,30 @@ export default function QrScanner({ navigation }: RootStackScreenProps<'QrScanne
         getBarCodeScannerPermissions();
     }, [])
 
+    const isJson = (str:any) => {
+      try {
+          JSON.parse(str);
+      } catch (e) {
+          return false;
+      }
+      return true;
+  }
+
     const handleBarCodeScanned = ({type, data}) => {
         setScanned(true);
+        console.log(data)
+        console.log(type)
+        if(isJson(data)) {
+          console.log("entre dans le json")
+          setData(data)
+        }
         alert(`bar code with type ${type} and data ${data} has been scanned!`);
     };
 
-    if(hasPermission === null) {
-        return <Text>Requesting for camera permission</Text>
-    }
+    // if(hasPermission === null) {
+    //     getBarCodeScannerPermissions();
+    //     return <Text>Requesting for camera permission</Text>
+    // }
     if(hasPermission === false){
         console.log(hasPermission)
         return (
@@ -38,17 +61,25 @@ export default function QrScanner({ navigation }: RootStackScreenProps<'QrScanne
         )
     }
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Qr scanner</Text>
-      <BarCodeScanner 
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-      />
-      {scanned && <Button title='Tap to scan again' onPress={() => setScanned(false)}/>}
-      {/* <TouchableOpacity onPress={() => navigation.replace('Root')} style={styles.link}>
-        <Text style={styles.linkText}>Go to home screen!</Text>
-      </TouchableOpacity> */}
-    </View>
+    <View>
+        <View style={styles.container}>
+          <BarCodeScanner 
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={[StyleSheet.absoluteFillObject, styles.containerQR]}
+            />
+        </View>
+        <View>
+          {scanned && <Button title='Tap to scan again' onPress={() => setScanned(false)}/>}
+          {data && (
+            <TouchableOpacity onPress={() => navigation.replace('Home')} style={styles.link}>
+            <Text style={styles.linkText}>Go to home screen!</Text>
+          </TouchableOpacity>
+          )}
+           <TouchableOpacity onPress={() => navigation.replace('Home')} style={styles.link}>
+            <Text style={styles.linkText}>Go to home screen!</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
   );
 }
 
@@ -57,7 +88,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    backgroundColor: 'red',
+    padding: windowHeight / 3,
   },
   title: {
     fontSize: 20,
@@ -71,4 +103,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
+  containerQR: {
+
+  }
 });
