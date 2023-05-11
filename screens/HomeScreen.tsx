@@ -4,7 +4,9 @@ import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+
 const windowWidth = Dimensions.get('window').width;
+
 const windowHeight = Dimensions.get('window').height;
 
 export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>) {
@@ -17,10 +19,10 @@ export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>)
       </View>
           <Image source={require('../assets/images/HomeScreen/img_display.png')} style={styles.image} />
         <View style={styles.alignCenter}>
-          <TouchableOpacity onPress={() => navigation.replace('Register')} style={styles.buttonStyle}>
-            <Text style={styles.buttonText}>Je crée un compte</Text>
+          <TouchableOpacity onPress={() => navigation.replace('Login')} style={styles.buttonStyle}>
+            <Text style={styles.buttonText}>Se connecter</Text>
           </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.replace('Login')} style={styles.buttonStyle2}>
+            <TouchableOpacity onPress={() => navigation.replace('Register')} style={styles.buttonStyle2}>
               <Text style={styles.buttonText2}>Inscrivez-vous</Text>
             </TouchableOpacity>
         </View>
@@ -48,6 +50,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: windowWidth,
+    height: windowHeight / 2,
   },
   title: {
     fontFamily: 'Inter_700Bold',
@@ -65,12 +68,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 8,
     marginTop: 24,
-    height: 50
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 8,
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight:'bold'
+    fontWeight:'bold',
+    fontFamily: 'Inter_600SemiBold',
   },
   buttonStyle2: {
     width: windowWidth - 24,
@@ -79,19 +91,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1.5,
     marginTop: 10,
-    height: 50
+    height: 50,
   },
   buttonText2: {
     color: '#0F2026',
     fontSize: 16,
+    fontFamily: 'Inter_600SemiBold',
   },
   DarkTxt: {
-    fontSize: 14,
+    fontSize: 10,
     color: '#0F2026',
+    fontFamily: 'Inter_500Medium',
   },
   BlueTxt: {
-    fontSize: 16,
+    fontSize: 10,
     color: '#00BDE7',
+    fontFamily: 'Inter_500Medium',
   },
   alignCenter: {
     backgroundColor: '#F2F2F2',
@@ -101,16 +116,18 @@ const styles = StyleSheet.create({
   confidentialPolicy: {
     backgroundColor: '#F2F2F2',
     flexDirection: 'row',
-    marginTop: 8,
+    marginTop: 16,
     marginLeft: 10,
     marginRight: 10,
     justifyContent: 'center',
   },
   premierText: {
-    fontSize: 12,
+    color: '#576D75',
+    fontSize: 10,
+    fontFamily: 'Inter_500Medium',
   },
   secondText: {
-    fontSize: 12,
-    color: '#00BDE7',
+    fontSize: 10,
+    color: '#F79F95',
   }
 });

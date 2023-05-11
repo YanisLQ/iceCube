@@ -4,7 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-import { useFonts, Inter_700Bold, Inter_600SemiBold } from '@expo-google-fonts/inter';
+import { useFonts, Inter_700Bold, Inter_600SemiBold, Inter_500Medium } from '@expo-google-fonts/inter';
 
 
 export default function App() {
@@ -14,6 +14,7 @@ export default function App() {
   let [fontsLoaded] = useFonts({
     Inter_700Bold,
     Inter_600SemiBold,
+    Inter_500Medium
   });
 
   if (!fontsLoaded) {
