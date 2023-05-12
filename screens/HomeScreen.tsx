@@ -1,5 +1,5 @@
-import { StyleSheet, TouchableOpacity, Button, Image, Dimensions } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import { StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
+import React from 'react';
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
