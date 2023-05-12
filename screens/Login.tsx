@@ -36,6 +36,7 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
           console.log("Échec de la connexion :", errorMessage);
         });
     };
+    
     const getEmailFromUsername = async (username) => {
       const q = query(collection(db, "users"), where("username", "==", username));
       const querySnapshot = await getDocs(q);
@@ -46,6 +47,7 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
         return null;
       }
     };
+
   return (
     <View style={styles.container}>
       <View>

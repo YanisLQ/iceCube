@@ -102,6 +102,8 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           </Text>
         </View>
       </View>
+      <Image source={require('../assets/images/leftCircle.png')} style={{position: 'absolute', top: windowHeight / 1.75, left: 0, zIndex: -1}} />
+      <Image source={require('../assets/images/rightCircle.png')} style={{position: 'absolute',bottom: windowHeight * 0.1, right: 0}}/>
     </View>
 
   );
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
     color: '#F79F95',
   },
   confidentialPolicy: {
-    backgroundColor: '#F6F6F6',
+    backgroundColor: 'transparent',
     flexDirection: 'row',
     marginTop: 16,
     marginLeft: 10,
