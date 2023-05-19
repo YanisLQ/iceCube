@@ -12,7 +12,7 @@ const windowHeight = Dimensions.get('window').height;
 export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const [user, setUser] = useState(null)
   const auth = getAuth();
 
 
@@ -29,6 +29,7 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
       signInWithEmailAndPassword(auth, userEmail, password)
         .then((userCredential) => {
           console.log("Connexion réussie");
+          navigation.navigate('Menu', { user: user })
           // setIsLoggedIn(true);
         })
         .catch((error) => {
@@ -36,7 +37,7 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
           console.log("Échec de la connexion :", errorMessage);
         });
     };
-    
+
     const getEmailFromUsername = async (username) => {
       const q = query(collection(db, "users"), where("username", "==", username));
       const querySnapshot = await getDocs(q);

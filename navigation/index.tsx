@@ -18,6 +18,8 @@ import QrScanner from '../screens/QrScanner';
 import HomeScreen from '../screens/HomeScreen';
 import Register from '../screens/Register';
 import Login from '../screens/Login';
+import MenuScreen from '../screens/MenuScreen';
+import CardDetails from '../screens/CardDetails';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -43,6 +45,8 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="QrScanner" component={QrScanner}/>
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name="Menu" component={MenuScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="CardDetails" component={CardDetails} options={{ headerShown: false }} />
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
