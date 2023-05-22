@@ -4,12 +4,15 @@ import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, FlatList, 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getMenu } from "../api/basicFunction";
 import { useState, useEffect } from "react";
-
+import { useRoute } from "@react-navigation/native";
+import MenuButton from "../components/BurgerMenu";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
-  
+    const route = useRoute();
+    const { user } = route.params;
+    console.log(user)
     const [menu, setMenu] = useState(null)
 
     useEffect(() => {
@@ -29,19 +32,20 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
         fetchData();
       }, []);
 
-      if(!menu){
+      if (!menu) {
         return (
-            <View>
-                <Text>chargement</Text>
-            </View>
-        )
+          <View>
+            <Text>Chargement</Text>
+          </View>
+        );
       }
+      
 
       const renderItem = ({ item, index }) => {
         const cardColor = index % 2 === 0 ? '#FBBFB8' : '#FFDFDB';
         const handleCardPress = () => {
             console.log('entre dedans: ' + item)
-            navigation.navigate('CardDetails', { id: item });
+            navigation.navigate('CardDetails', { id: item, user: user });
           };
 
         return (
@@ -56,13 +60,14 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
           </View>
         );
       };
-
-    return (
+      return (
         <SafeAreaView style={styles.container}>
+            <MenuButton navigation={navigation}/>
         <ScrollView>
           <View style={styles.helloContainer}>    
               <Image source={require('../assets/images/MenuScreen/Hello.png')} />
-              <Text style={styles.helloTxt}>Bonne journée</Text>
+              <Text style={styles.helloTxt}>Bonne journée,</Text>
+              <Text style={styles.helloTxt2}>{user.username}</Text>
           </View>
           <View style={styles.orderContainer}>
               <Text style={styles.orderTxt1}>Qu'est-ce que </Text>
@@ -88,18 +93,29 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
 }
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+      // flex: 1,
+      width: '100%',
+      height: '100%',
       backgroundColor: '#F6F6F6',
     },
     helloContainer: {
+      marginTop: 40,
         flexDirection: 'row',
-        paddingLeft: 10
+        paddingLeft: 10,
+        alignItems: 'center'
     },
     helloTxt: {
-        fontFamily: 'Inter_700Bold',
+        fontFamily: 'Inter_600SemiBold',
         fontSize: 22,
         lineHeight: 27,
         marginLeft: 8
+    },
+    helloTxt2: {
+        fontFamily: 'Inter_700Bold',
+        fontSize: 22,
+        lineHeight: 27,
+        marginLeft: 2,
+        textTransform: 'capitalize'
     },
     orderContainer: {
         marginTop: 26,

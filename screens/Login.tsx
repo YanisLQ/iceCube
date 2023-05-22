@@ -6,6 +6,7 @@ import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
 import { Feather, AntDesign } from '@expo/vector-icons'; 
 import { db, auth } from '../firebase-config';
 import { getFirestore, collection, getDocs, setDoc, doc, getDoc, query, where } from "firebase/firestore";
+import { getUserFromEmail } from '../api/basicFunction';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -19,17 +20,20 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
     const handleLogin = async () => {
       console.log("Tentative de connexion...");
       let userEmail = email;
+      let userAuth = user;
       if (!email.includes("@")) {
         userEmail = await getEmailFromUsername(email);
+        userAuth = await getUserFromEmail(userEmail);
+        setUser(userAuth)
         if (!userEmail) {
           console.log("Nom d'utilisateur introuvable");
           return;
         }
       }
-      signInWithEmailAndPassword(auth, userEmail, password)
+      await signInWithEmailAndPassword(auth, userEmail, password)
         .then((userCredential) => {
           console.log("Connexion réussie");
-          navigation.navigate('Menu', { user: user })
+          navigation.navigate('Menu', { user: userAuth })
           // setIsLoggedIn(true);
         })
         .catch((error) => {

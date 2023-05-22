@@ -14,7 +14,7 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
   const [filteredCards, setFilteredCards] = useState([]);
 
   const route = useRoute();
-  const { id } = route.params;
+  const { id, user } = route.params;
 
   const goBack = () => {
     navigation.goBack();
@@ -61,7 +61,8 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
       <View style={styles.header}>
         <View style={styles.helloContainer}>    
           <Image source={require('../assets/images/MenuScreen/Hello.png')} />
-          <Text style={styles.helloTxt}>Bonne journée</Text>
+          <Text style={styles.helloTxt}>Bonne journée,</Text>
+          <Text style={styles.helloTxt2}>{user.username}</Text>
         </View>
       </View>
       <ScrollView>
@@ -78,7 +79,7 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
         </View>
         <View style={styles.cardsContainer}>
           {filteredCards.map((card) => (
-            <TouchableOpacity key={card.id} style={styles.card}>
+            <TouchableOpacity key={card.id} style={styles.card} onPress={() => navigation.navigate('DishesScreen', {plats: card})}>
               <Text style={styles.cardTitle}>{card.nom}</Text>
               <View style={styles.tableContainer}>
               {card.ingredients.map((ingredient, index) => (
@@ -119,10 +120,17 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   },
   helloTxt: {
-    fontFamily: 'Inter_700Bold',
+    fontFamily: 'Inter_600SemiBold',
     fontSize: 22,
     lineHeight: 27,
     marginLeft: 8
+  },
+  helloTxt2: {
+    fontFamily: 'Inter_700Bold',
+    fontSize: 22,
+    lineHeight: 27,
+    marginLeft: 2,
+    textTransform: 'capitalize'
   },
   menu: {
     flexDirection: 'row',
