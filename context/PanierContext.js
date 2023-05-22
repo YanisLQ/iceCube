@@ -18,6 +18,15 @@ export const PanierProvider = ({ children }) => {
     setPanierItems([]);
   };
 
+  const getNombreElementsPanier = () => {
+    let count = 0;
+    panierItems.forEach((item) => {
+      count += item.quantite;
+    });
+    return count;
+  };
+  
+
   return (
     <PanierContext.Provider
       value={{
@@ -25,6 +34,7 @@ export const PanierProvider = ({ children }) => {
         addToPanier,
         removeFromPanier,
         clearPanier,
+        getNombreElementsPanier
       }}
     >
       {children}

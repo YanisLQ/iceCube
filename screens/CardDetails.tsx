@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { db, auth } from '../firebase-config';
+import { PanierContext } from '../context/PanierContext';
 import { getFirestore, collection, getDocs, setDoc, doc, getDoc, query, where } from "firebase/firestore";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -12,6 +13,7 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
   const [activeCategory, setActiveCategory] = useState('');
   const [card, setCards] = useState([])
   const [filteredCards, setFilteredCards] = useState([]);
+  const { getNombreElementsPanier } = useContext(PanierContext);
 
   const route = useRoute();
   const { id, user } = route.params;
@@ -94,6 +96,13 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
           ))}
         </View>
       </ScrollView>
+      {
+        getNombreElementsPanier() != 0 && (
+        <TouchableOpacity onPress={() => navigation.navigate('Panier')} style={styles.buttonStyle2}>
+          <Text style={styles.buttonText}>Mon panier &#40;{getNombreElementsPanier()}&#41;</Text>
+        </TouchableOpacity>
+        )
+      }
     </SafeAreaView>
   );
 }
@@ -209,5 +218,31 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_600SemiBold',
     fontSize: 16,
     color: '#F0604D'
-  }
+  },
+  buttonStyle2: {
+    backgroundColor: '#393939',
+    width: windowWidth * 0.85,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    marginTop: 36,
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 8,
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 45
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight:'bold',
+    fontFamily: 'Inter_600SemiBold',
+  },
 });

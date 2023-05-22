@@ -1,18 +1,19 @@
-import React from "react";
+import React, {useContext} from "react";
 import { RootStackScreenProps } from "../types";
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, FlatList, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getMenu } from "../api/basicFunction";
 import { useState, useEffect } from "react";
 import { useRoute } from "@react-navigation/native";
+import { PanierContext } from "../context/PanierContext";
 import MenuButton from "../components/BurgerMenu";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
+  const { getNombreElementsPanier } = useContext(PanierContext);
     const route = useRoute();
     const { user } = route.params;
-    console.log(user)
     const [menu, setMenu] = useState(null)
 
     useEffect(() => {
@@ -86,6 +87,13 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
                 />
           </View>
         </ScrollView>
+        {
+        getNombreElementsPanier() != 0 && (
+        <TouchableOpacity onPress={() => navigation.navigate('Panier')} style={styles.buttonStyle2}>
+          <Text style={styles.buttonText}>Mon panier &#40;{getNombreElementsPanier()}&#41;</Text>
+        </TouchableOpacity>
+        )
+      }
         <Image source={require('../assets/images/leftCircle.png')} style={{position: 'absolute', top: windowWidth * 0.35 ,left:0, zIndex: -1}} />
         <Image source={require('../assets/images/rightCircle.png')} style={{position: 'absolute',bottom: windowHeight * 0.1, right: 0}}/>
     </SafeAreaView>
@@ -174,5 +182,32 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 22,
         paddingTop: 14
+    },
+    buttonStyle2: {
+      backgroundColor: '#393939',
+      width: windowWidth * 0.85,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 8,
+      marginTop: 36,
+      height: 50,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 8,
+      alignSelf: 'center',
+      position: 'absolute',
+      bottom: 45,
+      zIndex: 99,
+    },
+    buttonText: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight:'bold',
+      fontFamily: 'Inter_600SemiBold',
     },
 });

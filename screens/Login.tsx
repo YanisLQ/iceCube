@@ -16,7 +16,10 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
   const [user, setUser] = useState(null)
   const auth = getAuth();
 
-
+    if(auth.currentUser) {
+      navigation.navigate('Menu', { user: auth.currentUser })
+    }
+    console.log(auth.currentUser?.email)
     const handleLogin = async () => {
       console.log("Tentative de connexion...");
       let userEmail = email;
@@ -24,6 +27,7 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
       if (!email.includes("@")) {
         userEmail = await getEmailFromUsername(email);
         userAuth = await getUserFromEmail(userEmail);
+        console.log(userEmail)
         setUser(userAuth)
         if (!userEmail) {
           console.log("Nom d'utilisateur introuvable");

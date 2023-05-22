@@ -10,7 +10,7 @@ const windowHeight = Dimensions.get('window').height;
 
 export default function DishesScreen({ navigation }: RootStackScreenProps<'DishesScreen'>) {
   const route = useRoute();
-  const { addToPanier } = useContext(PanierContext);
+  const { addToPanier, getNombreElementsPanier } = useContext(PanierContext);
 
   const { plats } = route.params;
 
@@ -101,9 +101,13 @@ export default function DishesScreen({ navigation }: RootStackScreenProps<'Dishe
         <Text style={styles.buttonText}>Mettre au panier</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Panier')} style={styles.buttonStyle}>
-        <Text style={styles.buttonText}>Mon panier</Text>
-      </TouchableOpacity>
+      {
+        getNombreElementsPanier() != 0 && (
+        <TouchableOpacity onPress={() => navigation.navigate('Panier')} style={styles.buttonStyle2}>
+          <Text style={styles.buttonText}>Mon panier &#40;{getNombreElementsPanier()}&#41;</Text>
+        </TouchableOpacity>
+        )
+      }
     </SafeAreaView>
   );
 }
@@ -224,6 +228,52 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 8,
     alignSelf: 'center'
+  },
+  buttonStyle2: {
+    backgroundColor: '#393939',
+    width: windowWidth * 0.85,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    marginTop: 36,
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 8,
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 45
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight:'bold',
+    fontFamily: 'Inter_600SemiBold',
+  },
+  buttonStyle2: {
+    backgroundColor: '#393939',
+    width: windowWidth * 0.85,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    marginTop: 36,
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 8,
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 45
   },
   buttonText: {
     color: 'white',
