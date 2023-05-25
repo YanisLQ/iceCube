@@ -9,14 +9,14 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function DishesScreen({ navigation }: RootStackScreenProps<'DishesScreen'>) {
+  const { addToPanier, getNombreElementsPanier,  } = useContext(PanierContext);
   const route = useRoute();
-  const { addToPanier, getNombreElementsPanier } = useContext(PanierContext);
 
-  const { plats } = route.params;
+  const { plats, user, restaurantId } = route.params;
 
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [quantity, setQuantity] = useState(1);
-
+console.log(user)
   const handleIngredientPress = (ingredient) => {
     if (selectedIngredients.includes(ingredient)) {
       setSelectedIngredients(selectedIngredients.filter(item => item !== ingredient));
@@ -34,16 +34,16 @@ export default function DishesScreen({ navigation }: RootStackScreenProps<'Dishe
       setQuantity(quantity - 1);
     }
   };
-
   console.log(plats)
   const handleAjouterPanier = () => {
     // Créez un objet pour représenter l'élément ajouté au panier
     const item = {
-      id: plats.nom,
+      id: getNombreElementsPanier(),
       nom: plats.nom,
       ingredients: selectedIngredients,
       quantite: quantity,
       prix: plats.prix,
+      urlPhoto: plats.urlPhoto
     };
     addToPanier(item);
     console.log("item ajouté au panier")
@@ -103,7 +103,7 @@ export default function DishesScreen({ navigation }: RootStackScreenProps<'Dishe
 
       {
         getNombreElementsPanier() != 0 && (
-        <TouchableOpacity onPress={() => navigation.navigate('Panier')} style={styles.buttonStyle2}>
+        <TouchableOpacity onPress={() => navigation.navigate('Panier', {user: user, restaurantId: restaurantId})} style={styles.buttonStyle2}>
           <Text style={styles.buttonText}>Mon panier &#40;{getNombreElementsPanier()}&#41;</Text>
         </TouchableOpacity>
         )

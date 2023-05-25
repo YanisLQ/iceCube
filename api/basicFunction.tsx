@@ -26,5 +26,18 @@ const getMenu = async (restaurantId) => {
         return null;
     }
 }
+const getRestaurantId = async (restaurantId) => {
+    const restaurant:any = []
+    const q = query(collection(db, "restaurants"), where("id", "==", restaurantId))
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+        querySnapshot.docs.forEach(element => {
+            restaurant.push(element.id)
+        });
+        return restaurant
+    } else {
+        return null;
+    }
+}
 
-export { getUserFromEmail, getMenu };
+export { getUserFromEmail, getMenu, getRestaurantId };

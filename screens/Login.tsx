@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet, Dimensions, Image } from 'react-native';
 import { RootTabScreenProps } from '../types';
 import { initializeApp } from "firebase/app";
@@ -7,7 +7,7 @@ import { Feather, AntDesign } from '@expo/vector-icons';
 import { db, auth } from '../firebase-config';
 import { getFirestore, collection, getDocs, setDoc, doc, getDoc, query, where } from "firebase/firestore";
 import { getUserFromEmail } from '../api/basicFunction';
-
+import { getRestaurantId } from '../api/basicFunction';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
@@ -15,11 +15,21 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null)
   const auth = getAuth();
+  const [restaurant, setRestaurant] = useState(null)
+    
+  useEffect(() => {
+    const checkCurrentUser = async () => {
+      setRestaurant(await getRestaurantId('sunburgercreil'))
+      if (auth.currentUser) {
+        let userEmail = auth.currentUser.email;
+        let userAuth = await getUserFromEmail(userEmail);
+        navigation.navigate('Menu', { user: userAuth, restaurantId: restaurant });
+      }
+    };
 
-    if(auth.currentUser) {
-      navigation.navigate('Menu', { user: auth.currentUser })
-    }
-    console.log(auth.currentUser?.email)
+    checkCurrentUser();
+  }, []);
+  console.log(restaurant)
     const handleLogin = async () => {
       console.log("Tentative de connexion...");
       let userEmail = email;
@@ -27,7 +37,6 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
       if (!email.includes("@")) {
         userEmail = await getEmailFromUsername(email);
         userAuth = await getUserFromEmail(userEmail);
-        console.log(userEmail)
         setUser(userAuth)
         if (!userEmail) {
           console.log("Nom d'utilisateur introuvable");
@@ -37,7 +46,7 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
       await signInWithEmailAndPassword(auth, userEmail, password)
         .then((userCredential) => {
           console.log("Connexion réussie");
-          navigation.navigate('Menu', { user: userAuth })
+          navigation.navigate('Menu', { user: userAuth, restaurantId: restaurant })
           // setIsLoggedIn(true);
         })
         .catch((error) => {
@@ -92,7 +101,7 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
         </TouchableOpacity>
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingTop: 12}}>
           <Text style={styles.premierText}>Pas de compte ?</Text>
-          <Text style={styles.secondText} onPress={() => console.log('page register')}> Inscrivez-vous </Text>
+          <Text style={styles.secondText} onPress={() => navigation.navigate('Register')}> Inscrivez-vous </Text>
         </View>
       </View>
     </View>

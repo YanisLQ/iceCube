@@ -13,9 +13,8 @@ const windowHeight = Dimensions.get('window').height;
 export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
   const { getNombreElementsPanier } = useContext(PanierContext);
     const route = useRoute();
-    const { user } = route.params;
+    const { user, restaurantId } = route.params;
     const [menu, setMenu] = useState(null)
-
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -46,7 +45,7 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
         const cardColor = index % 2 === 0 ? '#FBBFB8' : '#FFDFDB';
         const handleCardPress = () => {
             console.log('entre dedans: ' + item)
-            navigation.navigate('CardDetails', { id: item, user: user });
+            navigation.navigate('CardDetails', { id: item, user: user, restaurantId: restaurantId });
           };
 
         return (
@@ -89,7 +88,7 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
         </ScrollView>
         {
         getNombreElementsPanier() != 0 && (
-        <TouchableOpacity onPress={() => navigation.navigate('Panier')} style={styles.buttonStyle2}>
+        <TouchableOpacity onPress={() => navigation.navigate('Panier',{ restaurantId: restaurantId})} style={styles.buttonStyle2}>
           <Text style={styles.buttonText}>Mon panier &#40;{getNombreElementsPanier()}&#41;</Text>
         </TouchableOpacity>
         )

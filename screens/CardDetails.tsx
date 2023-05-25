@@ -16,8 +16,7 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
   const { getNombreElementsPanier } = useContext(PanierContext);
 
   const route = useRoute();
-  const { id, user } = route.params;
-
+  const { id, user, restaurantId } = route.params;
   const goBack = () => {
     navigation.goBack();
   };
@@ -81,7 +80,7 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
         </View>
         <View style={styles.cardsContainer}>
           {filteredCards.map((card) => (
-            <TouchableOpacity key={card.id} style={styles.card} onPress={() => navigation.navigate('DishesScreen', {plats: card})}>
+            <TouchableOpacity key={card} style={styles.card} onPress={() => navigation.navigate('DishesScreen', {plats: card, user: user, restaurantId: restaurantId})}>
               <Text style={styles.cardTitle}>{card.nom}</Text>
               <View style={styles.tableContainer}>
               {card.ingredients.map((ingredient, index) => (
@@ -98,7 +97,7 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
       </ScrollView>
       {
         getNombreElementsPanier() != 0 && (
-        <TouchableOpacity onPress={() => navigation.navigate('Panier')} style={styles.buttonStyle2}>
+        <TouchableOpacity onPress={() => navigation.navigate('Panier', {restaurantId: restaurantId})} style={styles.buttonStyle2}>
           <Text style={styles.buttonText}>Mon panier &#40;{getNombreElementsPanier()}&#41;</Text>
         </TouchableOpacity>
         )

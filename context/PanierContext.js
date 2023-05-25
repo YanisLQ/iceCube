@@ -18,6 +18,32 @@ export const PanierProvider = ({ children }) => {
     setPanierItems([]);
   };
 
+  const incrementQuantity = (itemId) => {
+    setPanierItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === itemId ? { ...item, quantite: item.quantite + 1 } : item
+      )
+    );
+  };
+
+  const decrementQuantity = (itemId) => {
+    setPanierItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === itemId && item.quantite > 0
+          ? { ...item, quantite: item.quantite - 1 }
+          : item
+      ).filter((item) => item.quantite > 0)
+    );
+  };
+
+  const getPrixTotalPanier = () => {
+    let total = 0;
+    panierItems.forEach((item) => {
+      total += item.prix * item.quantite;
+    });
+    return total;
+  };
+
   const getNombreElementsPanier = () => {
     let count = 0;
     panierItems.forEach((item) => {
@@ -34,7 +60,10 @@ export const PanierProvider = ({ children }) => {
         addToPanier,
         removeFromPanier,
         clearPanier,
-        getNombreElementsPanier
+        getNombreElementsPanier,
+        incrementQuantity,
+        decrementQuantity,
+        getPrixTotalPanier
       }}
     >
       {children}
