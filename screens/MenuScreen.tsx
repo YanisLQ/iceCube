@@ -14,6 +14,7 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
   const { getNombreElementsPanier } = useContext(PanierContext);
     const route = useRoute();
     const { user, restaurantId, restaurantNameId,  numtable } = route.params;
+    // console.log(user)
     const [menu, setMenu] = useState(null)
     useEffect(() => {
         const fetchData = async () => {
@@ -61,7 +62,7 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
       };
       return (
         <SafeAreaView style={styles.container}>
-            <MenuButton navigation={navigation}/>
+            <MenuButton navigation={navigation} numtable={numtable}/>
         <ScrollView>
           <View style={styles.helloContainer}>    
               <Image source={require('../assets/images/MenuScreen/Hello.png')} />

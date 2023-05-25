@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Image, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { db, auth } from '../firebase-config';
+import { FontAwesome } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 const MenuButton = ({ navigation }) => {
   const route = useRoute();
-  const { numtable, restaurantNameId } = route.params;
-  console.log(restaurantNameId)
+  const { numtable, restaurantNameId, user } = route.params;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleMenuToggle = () => {
@@ -23,11 +23,22 @@ const MenuButton = ({ navigation }) => {
     await auth.signOut();
       navigation.navigate('Home', {restaurantId: restaurantNameId, numtable: numtable})
   };
+  const handleShowCmd = async (navigation) => {
+    setIsMenuOpen(false)
+      navigation.navigate('CommandeAdmin', {restaurantId: restaurantNameId, numtable: numtable, user: user})
+  };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handleMenuToggle} style={styles.button}>
-        <Ionicons name={isMenuOpen ? "close" : "menu"} size={32} color="black" />
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <Ionicons name={isMenuOpen ? "close" : "menu"} size={32} color="black" />
+          <Text style={{marginRight: 12, backgroundColor: '#FFFFFF', paddingHorizontal: 18, paddingVertical: 6, borderRadius: 12, fontFamily: 'Inter_500Medium', fontSize: 14 }}>n°{numtable}</Text>
+        </View>
       </TouchableOpacity>
       {isMenuOpen && (
         <View style={styles.menu}>
@@ -43,6 +54,12 @@ const MenuButton = ({ navigation }) => {
             <Ionicons name="settings" size={20} color="black" style={styles.menuIcon} />
             <Text style={styles.menuText}>Paramètres</Text>
           </TouchableOpacity>
+          { user.userRole == 1 && (
+                <TouchableOpacity onPress={() => handleShowCmd(navigation)} style={styles.menuItem}>
+                  <FontAwesome name="cogs" size={20} color="black" style={styles.menuIcon} />
+                 <Text style={styles.menuText}>Commande en cours</Text>
+               </TouchableOpacity>
+          )}
           <TouchableOpacity onPress={() => handleLogout(navigation)} style={styles.menuItem}>
             <Ionicons name="log-out" size={20} color="black" style={styles.menuIcon} />
             <Text style={styles.menuText}>Déconnexion</Text>

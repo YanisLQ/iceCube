@@ -14,7 +14,7 @@ const PanierScreen = ({ navigation }) => {
 
   const { user, restaurantId, restaurantNameId } = route.params;
   const { panierItems, removeFromPanier, clearPanier, incrementQuantity, decrementQuantity, getNombreElementsPanier, getPrixTotalPanier } = useContext(PanierContext);
-
+  console.log(panierItems)
   const renderItem = ({ item }) => {
     const handleIncrement = () => {
       incrementQuantity(item.id);

@@ -21,6 +21,7 @@ import Login from '../screens/Login';
 import MenuScreen from '../screens/MenuScreen';
 import ProfileScreen from '../screens/ProfilScreen';
 import PanierScreen from '../screens/PanierScreen';
+import CommandeAdmin from '../screens/CommandeAdmin';
 import CardDetails from '../screens/CardDetails';
 import DishesScreen from '../screens/DishesScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
@@ -57,6 +58,7 @@ function RootNavigator() {
       <Stack.Screen name="Panier" component={PanierScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="Profil" component={ProfileScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="CommandeAdmin" component={CommandeAdmin} options={{ headerShown: false }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
