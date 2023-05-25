@@ -1,28 +1,47 @@
 import { StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-
+import { useRoute } from '@react-navigation/native';
+import { getRestaurant } from '../api/basicFunction';
 const windowWidth = Dimensions.get('window').width;
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>) {
+  const route = useRoute();
+  const { restaurantId, numtable } = route.params;
+  const [restaurant, setRestaurant] = useState(null)
+  // console.log(restaurantId)
+  useEffect(() => {
+    const checkCurrentUser = async () => {
+      setRestaurant(await getRestaurant(restaurantId));
+    };
+  
+    checkCurrentUser();
+  }, []);
 
+  if (!restaurant) {
+    return (
+      <View>
+        <Text>Chargement</Text>
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.alignCenter}>
-        <Text style={styles.title}>MealMate</Text>
+        <Text style={styles.title}>{restaurant.name}</Text>
         <Text style={styles.subtitle}>Commander directement sur mobile</Text>
+        <Text style={styles.subtitle2}>by MeatMate</Text>
       </View>
           <Image source={require('../assets/images/HomeScreen/img_display.png')} style={styles.image} />
         <View style={styles.alignCenter}>
-          <TouchableOpacity onPress={() => navigation.replace('Login')} style={styles.buttonStyle}>
+          <TouchableOpacity onPress={() => navigation.replace('Login', {restaurantId: restaurantId, numtable: numtable})} style={styles.buttonStyle}>
             <Text style={styles.buttonText}>Se connecter</Text>
           </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.replace('Register')} style={styles.buttonStyle2}>
+            <TouchableOpacity onPress={() => navigation.replace('Register', {restaurantId: restaurantId, numtable: numtable})} style={styles.buttonStyle2}>
               <Text style={styles.buttonText2}>Inscrivez-vous</Text>
             </TouchableOpacity>
         </View>
@@ -54,11 +73,18 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Inter_700Bold',
-     fontSize: 32
+     fontSize: 32,
+     color: '#3A3A3A'
   },
   subtitle: {
     fontFamily: 'Inter_600SemiBold',
     color: '#565656',
+    fontSize: 12,
+  },
+  subtitle2: {
+    fontFamily: 'Inter_500Medium',
+    color: '#565656',
+    textDecorationStyle: 'solid',
     fontSize: 12,
   },
   buttonStyle: {
@@ -109,6 +135,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_500Medium',
   },
   alignCenter: {
+    marginTop: 24,
     backgroundColor: '#F2F2F2',
     justifyContent: 'center',
     alignItems: 'center',
@@ -122,7 +149,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   premierText: {
-    color: '#576D75',
+    color: '#3A3A3A',
     fontSize: 10,
     fontFamily: 'Inter_500Medium',
   },

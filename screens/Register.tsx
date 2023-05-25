@@ -5,13 +5,15 @@ import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth'
 import { Feather, AntDesign } from '@expo/vector-icons';
 import { getFirestore, collection, getDocs, setDoc, doc, getDoc } from "firebase/firestore";
 import { db, auth } from '../firebase-config';
-
-
+import { useRoute } from '@react-navigation/native';
+import { getUserFromEmail } from '../api/basicFunction';
 // Utilisez cette fonction pour récupérer les données
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+  const route = useRoute();
+  const {restaurantId, numtable} = route.params
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,22 +35,25 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
         auth,
         userEmail,
         password
-      );
-      const user = userCredential.user;
-      const userDocRef = doc(db, "users", user.uid);
-      await setDoc(userDocRef, {
-        email: user.email,
-        uid: user.uid,
-        username: name,
-      });
-      console.log("User document created successfully.");
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if (userDoc.exists()) {
-        console.log("User data retrieved from Firestore:", userDoc.data());
-        // setIsLoggedIn(true);
-      } else {
-        console.log("User document not found in Firestore.");
-      }
+        );
+        const user = userCredential.user;
+        const userDocRef = doc(db, "users", user.uid);
+        await setDoc(userDocRef, {
+          email: user.email,
+          uid: user.uid,
+          username: name,
+          userRole: 0
+        });
+        console.log("User document created successfully.");
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          console.log("User data retrieved from Firestore:", userDoc.data());
+          // setIsLoggedIn(true);
+        } else {
+          console.log("User document not found in Firestore.");
+        }
+        let userAuth = await getUserFromEmail(user.email);
+        navigation.navigate('Menu', {user: userAuth, restaurantId: restaurantId, numtable: numtable})
     } catch (error) {
       console.log("erreur");
     }
@@ -60,7 +65,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
     <View style={styles.container}>
       <View style={{position: 'absolute', margin: 54}}>
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 24}}>
-          <TouchableOpacity onPress={() =>navigation.navigate('Home')} style={{zIndex: 1}}>
+          <TouchableOpacity onPress={() =>navigation.navigate('Home', {restaurantId: restaurantId, numtable: numtable})} style={{zIndex: 1}}>
             <Image source={require('../assets/images/backArrow2.png')} style={{width: 24, height: 24}} />     
           </TouchableOpacity>
           <Text style={styles.textHeader}>S'inscrire</Text>
@@ -103,7 +108,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
         </View>
       </View>
       <Image source={require('../assets/images/leftCircle.png')} style={{position: 'absolute', top: windowHeight / 1.75, left: 0, zIndex: -1}} />
-      <Image source={require('../assets/images/rightCircle.png')} style={{position: 'absolute',bottom: windowHeight * 0.1, right: 0}}/>
+      <Image source={require('../assets/images/rightCircle.png')} style={{position: 'absolute',bottom: windowHeight * 0.1, right: 0, zIndex: -1}}/>
     </View>
 
   );

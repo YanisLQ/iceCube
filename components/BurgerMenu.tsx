@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Image, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { db, auth } from '../firebase-config';
-
+import { useRoute } from "@react-navigation/native";
 const MenuButton = ({ navigation }) => {
+  const route = useRoute();
+  const { numtable, restaurantNameId } = route.params;
+  console.log(restaurantNameId)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleMenuToggle = () => {
@@ -18,9 +21,7 @@ const MenuButton = ({ navigation }) => {
   const handleLogout = async (navigation) => {
     setIsMenuOpen(false)
     await auth.signOut();
-    // Implémentez ici la logique de déconnexion
-    // Par exemple, réinitialisez l'état de l'application ou redirigez vers l'écran de connexion
-      navigation.navigate('Home')
+      navigation.navigate('Home', {restaurantId: restaurantNameId, numtable: numtable})
   };
 
   return (

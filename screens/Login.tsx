@@ -8,9 +8,13 @@ import { db, auth } from '../firebase-config';
 import { getFirestore, collection, getDocs, setDoc, doc, getDoc, query, where } from "firebase/firestore";
 import { getUserFromEmail } from '../api/basicFunction';
 import { getRestaurantId } from '../api/basicFunction';
+import { useRoute } from '@react-navigation/native';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+  const route = useRoute();
+  const { restaurantId, restaurantNameId ,numtable } = route.params;
+  // console.log(restaurantId)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null)
@@ -19,17 +23,16 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
     
   useEffect(() => {
     const checkCurrentUser = async () => {
-      setRestaurant(await getRestaurantId('sunburgercreil'))
+      setRestaurant(await getRestaurantId(restaurantId))
       if (auth.currentUser) {
         let userEmail = auth.currentUser.email;
         let userAuth = await getUserFromEmail(userEmail);
-        navigation.navigate('Menu', { user: userAuth, restaurantId: restaurant });
+        navigation.navigate('Menu', { user: userAuth, restaurantId: restaurant, restaurantNameId: restaurantId, numtable: numtable });
       }
     };
 
     checkCurrentUser();
   }, []);
-  console.log(restaurant)
     const handleLogin = async () => {
       console.log("Tentative de connexion...");
       let userEmail = email;
@@ -46,7 +49,7 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
       await signInWithEmailAndPassword(auth, userEmail, password)
         .then((userCredential) => {
           console.log("Connexion réussie");
-          navigation.navigate('Menu', { user: userAuth, restaurantId: restaurant })
+          navigation.navigate('Menu', { user: userAuth, restaurantId: restaurant, restaurantNameId: restaurantId, numtable: numtable })
           // setIsLoggedIn(true);
         })
         .catch((error) => {
@@ -73,7 +76,7 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
       </View>
       <View style={{position: 'absolute', margin: 54}}>
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 24}}>
-          <TouchableOpacity onPress={() =>navigation.navigate('Home')} style={{zIndex: 1}}>
+          <TouchableOpacity onPress={() =>navigation.navigate('Home', {restaurantId: restaurantId, numtable: numtable})} style={{zIndex: 1}}>
             <Image source={require('../assets/images/backArrow.png')} style={{width: 24, height: 24}} />     
           </TouchableOpacity>
           <Text style={styles.textHeader}>Se connecter</Text>

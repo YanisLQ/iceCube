@@ -12,11 +12,9 @@ export default function DishesScreen({ navigation }: RootStackScreenProps<'Dishe
   const { addToPanier, getNombreElementsPanier,  } = useContext(PanierContext);
   const route = useRoute();
 
-  const { plats, user, restaurantId } = route.params;
-
+  const { plats, user, restaurantId, restaurantNameId} = route.params;
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [quantity, setQuantity] = useState(1);
-console.log(user)
   const handleIngredientPress = (ingredient) => {
     if (selectedIngredients.includes(ingredient)) {
       setSelectedIngredients(selectedIngredients.filter(item => item !== ingredient));
@@ -34,7 +32,6 @@ console.log(user)
       setQuantity(quantity - 1);
     }
   };
-  console.log(plats)
   const handleAjouterPanier = () => {
     // Créez un objet pour représenter l'élément ajouté au panier
     const item = {
@@ -51,7 +48,7 @@ console.log(user)
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 24}}>
+      <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 24, marginTop: 12}}>
         <TouchableOpacity onPress={navigation.goBack} style={{zIndex: 1}}>
           <Image source={require('../assets/images/backArrow2.png')} style={{width: 24, height: 24, marginLeft: 22}} />     
         </TouchableOpacity>
@@ -103,7 +100,7 @@ console.log(user)
 
       {
         getNombreElementsPanier() != 0 && (
-        <TouchableOpacity onPress={() => navigation.navigate('Panier', {user: user, restaurantId: restaurantId})} style={styles.buttonStyle2}>
+        <TouchableOpacity onPress={() => navigation.navigate('Panier', {user: user, restaurantId: restaurantId, restaurantNameId: restaurantNameId})} style={styles.buttonStyle2}>
           <Text style={styles.buttonText}>Mon panier &#40;{getNombreElementsPanier()}&#41;</Text>
         </TouchableOpacity>
         )
@@ -134,9 +131,10 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#F6F6F6'
+    backgroundColor: '#F6F6F6',
   },
   imageContainer: {
+  
   },
   image: {
     width: 220,
@@ -145,13 +143,13 @@ const styles = StyleSheet.create({
     
   },
   txtImage: {
-    marginRight: 18,
+    marginRight: 26,
     textAlign: 'right',
     fontFamily: 'Inter_500Medium',
     fontSize: 18,
   },
   txtImage2: {
-    marginRight: 18,
+    marginRight: 26,
     textAlign: 'right',
     fontFamily: 'Inter_400Regular',
     fontSize: 14,

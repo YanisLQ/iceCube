@@ -16,11 +16,10 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
   const { getNombreElementsPanier } = useContext(PanierContext);
 
   const route = useRoute();
-  const { id, user, restaurantId } = route.params;
+  const { id, user, restaurantId, restaurantNameId } = route.params;
   const goBack = () => {
     navigation.goBack();
   };
-
   useEffect(() => {
     // Récupérer les catégories depuis la collection "plats" dans Firebase
     const fetchCategories = async () => {
@@ -50,10 +49,9 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
   const handleCategoryPress = (category) => {
     setActiveCategory(category);
   };
-
   return (
     <SafeAreaView style={styles.container}>
-        <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 24}}>
+        <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 24, marginTop: 12}}>
           <TouchableOpacity onPress={goBack} style={{zIndex: 1}}>
             <Image source={require('../assets/images/backArrow2.png')} style={{width: 24, height: 24, marginLeft: 22}} />     
           </TouchableOpacity>
@@ -80,7 +78,7 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
         </View>
         <View style={styles.cardsContainer}>
           {filteredCards.map((card) => (
-            <TouchableOpacity key={card} style={styles.card} onPress={() => navigation.navigate('DishesScreen', {plats: card, user: user, restaurantId: restaurantId})}>
+            <TouchableOpacity key={card} style={styles.card} onPress={() => navigation.navigate('DishesScreen', {plats: card, user: user, restaurantId: restaurantId, restaurantNameId: restaurantNameId})}>
               <Text style={styles.cardTitle}>{card.nom}</Text>
               <View style={styles.tableContainer}>
               {card.ingredients.map((ingredient, index) => (
@@ -97,7 +95,7 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
       </ScrollView>
       {
         getNombreElementsPanier() != 0 && (
-        <TouchableOpacity onPress={() => navigation.navigate('Panier', {restaurantId: restaurantId})} style={styles.buttonStyle2}>
+        <TouchableOpacity onPress={() => navigation.navigate('Panier', {restaurantId: restaurantId, user: user, restaurantNameId: restaurantNameId})} style={styles.buttonStyle2}>
           <Text style={styles.buttonText}>Mon panier &#40;{getNombreElementsPanier()}&#41;</Text>
         </TouchableOpacity>
         )
@@ -125,7 +123,7 @@ const styles = StyleSheet.create({
   },
   helloContainer: {
     flexDirection: 'row',
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   helloTxt: {
     fontFamily: 'Inter_600SemiBold',

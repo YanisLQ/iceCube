@@ -12,7 +12,7 @@ const windowWidth = Dimensions.width;
 const PanierScreen = ({ navigation }) => {
   const route = useRoute();
 
-  const { user, restaurantId } = route.params;
+  const { user, restaurantId, restaurantNameId } = route.params;
   const { panierItems, removeFromPanier, clearPanier, incrementQuantity, decrementQuantity, getNombreElementsPanier, getPrixTotalPanier } = useContext(PanierContext);
 
   const renderItem = ({ item }) => {
@@ -63,7 +63,8 @@ const PanierScreen = ({ navigation }) => {
         articles: panierItems,
         statutCommande: "en préparation",
         montantTotal: getPrixTotalPanier(),
-        restaurantId: restaurantId
+        restaurantId: restaurantId,
+        restaurantNameId: restaurantNameId
       });
 
         console.log("commande passé avec succès")

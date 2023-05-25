@@ -1,108 +1,77 @@
-import { StyleSheet, TouchableOpacity, Button, Dimensions } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import { Text, View } from '../components/Themed';
-import { RootStackScreenProps } from '../types';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, Button, TouchableOpacity, } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as Permissions from 'expo-permissions';
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+export default function QRScanner({ navigation }: RootStackScreenProps<'QrScanner'>) {
+  const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [scannedData, setScannedData] = useState(null);
+  useEffect(() => {
+    (async () => {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA);
+      setHasCameraPermission(status === 'granted');
+    })();
+  }, []);
 
-export default function QrScanner({ navigation }: RootStackScreenProps<'QrScanner'>) {
-    const [hasPermission, setHasPermission] = useState(null);
-    const [scanned, setScanned] = useState(false);
-    const [data, setData] = useState(null);
+  console.log(scannedData)
+  const handleBarCodeScanned = ({ type, data }) => {
+    const [restaurantId, numtable] = data.split(',');
+    navigation.replace('Home', { restaurantId: restaurantId,numtable: numtable });
 
-
-
-    console.log(windowWidth, windowHeight)
-    const getBarCodeScannerPermissions = () => {
-        ( async () => {
-            const status = await BarCodeScanner.requestPermissionsAsync();
-            console.log(status)
-            setHasPermission(status == 'granted');
-        })
-    }
-    useEffect(() => {
-
-        getBarCodeScannerPermissions();
-    }, [])
-
-    const isJson = (str:any) => {
-      try {
-          JSON.parse(str);
-      } catch (e) {
-          return false;
-      }
-      return true;
+  };
+  if (hasCameraPermission === null) {
+    return <Text>Requesting camera permission...</Text>;
+  }
+  if (hasCameraPermission === false) {
+    return <Text>No access to camera.</Text>;
   }
 
-    const handleBarCodeScanned = ({type, data}) => {
-        setScanned(true);
-        console.log(data)
-        console.log(type)
-        if(isJson(data)) {
-          console.log("entre dans le json")
-          setData(data)
-        }
-        alert(`bar code with type ${type} and data ${data} has been scanned!`);
-    };
 
-    // if(hasPermission === null) {
-    //     getBarCodeScannerPermissions();
-    //     return <Text>Requesting for camera permission</Text>
-    // }
-    if(hasPermission === false){
-        console.log(hasPermission)
-        return (
-            <View style={styles.container}>
-                <Text>No access to camera</Text>
-                <Button title={'Allow Camera'} onPress={() => getBarCodeScannerPermissions()} />
-            </View>
-        )
-    }
   return (
-    <View>
-        <View style={styles.container}>
-          <BarCodeScanner 
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            style={[StyleSheet.absoluteFillObject, styles.containerQR]}
-            />
+    <View style={styles.container}>
+      <BarCodeScanner
+        style={StyleSheet.absoluteFillObject}
+        onBarCodeScanned={handleBarCodeScanned}
+      />
+      {scannedData && (
+        <View style={styles.overlay}>
+          <Text style={styles.scanText}>Scanned Data:</Text>
+          <Text style={styles.scanResult}>{scannedData}</Text>
         </View>
-        <View>
-          {scanned && <Button title='Tap to scan again' onPress={() => setScanned(false)}/>}
-          {data && (
-            <TouchableOpacity onPress={() => navigation.replace('Home')} style={styles.link}>
-            <Text style={styles.linkText}>Go to home screen!</Text>
-          </TouchableOpacity>
-          )}
-           <TouchableOpacity onPress={() => navigation.replace('Home')} style={styles.link}>
-            <Text style={styles.linkText}>Go to home screen!</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      )}
+      {!scannedData && (
+        <TouchableOpacity onPress={() => navigation.replace('Home')} style={styles.overlay}>
+          <Text style={styles.scanText}>Scan QR code</Text>
+        </TouchableOpacity>
+      )}
+    </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    flexDirection: 'column',
     justifyContent: 'center',
-    padding: windowHeight / 3,
   },
-  title: {
+  overlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    padding: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  scanText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+    marginBottom: 8,
   },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
+  scanResult: {
+    fontSize: 16,
+    color: '#fff',
+    textAlign: 'center',
   },
-  linkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
-  containerQR: {
-
-  }
 });

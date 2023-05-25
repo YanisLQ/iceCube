@@ -13,7 +13,7 @@ const windowHeight = Dimensions.get('window').height;
 export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
   const { getNombreElementsPanier } = useContext(PanierContext);
     const route = useRoute();
-    const { user, restaurantId } = route.params;
+    const { user, restaurantId, restaurantNameId,  numtable } = route.params;
     const [menu, setMenu] = useState(null)
     useEffect(() => {
         const fetchData = async () => {
@@ -39,13 +39,12 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
           </View>
         );
       }
-      
 
       const renderItem = ({ item, index }) => {
         const cardColor = index % 2 === 0 ? '#FBBFB8' : '#FFDFDB';
         const handleCardPress = () => {
             console.log('entre dedans: ' + item)
-            navigation.navigate('CardDetails', { id: item, user: user, restaurantId: restaurantId });
+            navigation.navigate('CardDetails', { id: item, user: user, restaurantId: restaurantId, restaurantNameId: restaurantNameId, numtable: numtable });
           };
 
         return (
@@ -88,7 +87,7 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
         </ScrollView>
         {
         getNombreElementsPanier() != 0 && (
-        <TouchableOpacity onPress={() => navigation.navigate('Panier',{ restaurantId: restaurantId})} style={styles.buttonStyle2}>
+        <TouchableOpacity onPress={() => navigation.navigate('Panier',{ restaurantId: restaurantId, restaurantNameId: restaurantNameId, numtable: numtable})} style={styles.buttonStyle2}>
           <Text style={styles.buttonText}>Mon panier &#40;{getNombreElementsPanier()}&#41;</Text>
         </TouchableOpacity>
         )
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#F6F6F6',
     },
     helloContainer: {
-      marginTop: 40,
+      marginTop: 56,
         flexDirection: 'row',
         paddingLeft: 10,
         alignItems: 'center'
@@ -155,6 +154,7 @@ const styles = StyleSheet.create({
         height: windowHeight * 0.25,
         borderRadius: 12,
         zIndex: 1,
+        elevation: 5
     },
     cardBackground: {
         position: 'absolute',

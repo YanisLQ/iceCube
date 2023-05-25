@@ -40,4 +40,15 @@ const getRestaurantId = async (restaurantId) => {
     }
 }
 
-export { getUserFromEmail, getMenu, getRestaurantId };
+const getRestaurant = async (restaurantId) => {
+    console.log(restaurantId)
+    const q = query(collection(db, "restaurants"), where("id", "==", restaurantId))
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+        const restaurant = querySnapshot.docs[0].data();
+        return restaurant
+    } else {
+        return null;
+    }
+}
+export { getUserFromEmail, getMenu, getRestaurantId, getRestaurant };
