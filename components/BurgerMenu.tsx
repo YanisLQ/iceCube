@@ -46,7 +46,7 @@ const MenuButton = ({ navigation }) => {
             <Ionicons name="person" size={20} color="black" style={styles.menuIcon} />
             <Text style={styles.menuText}>Profil</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleMenuPress("OrdersScreen")} style={styles.menuItem}>
+          <TouchableOpacity onPress={() => navigation.navigate('Orders')} style={styles.menuItem}>
             <Ionicons name="receipt" size={20} color="black" style={styles.menuIcon} />
             <Text style={styles.menuText}>Mes commandes</Text>
           </TouchableOpacity>

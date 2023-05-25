@@ -68,6 +68,7 @@ const PanierScreen = ({ navigation }) => {
       });
 
         console.log("commande passé avec succès")
+        navigation.navigate('OrderConfirm', {panierItems: panierItems})
     } catch (error) {
       console.error("Erreur lors de l'ajout de la commande : ", error);
     }

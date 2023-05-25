@@ -14,12 +14,12 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
   const { getNombreElementsPanier } = useContext(PanierContext);
     const route = useRoute();
     const { user, restaurantId, restaurantNameId,  numtable } = route.params;
-    // console.log(user)
     const [menu, setMenu] = useState(null)
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const getM = await getMenu('MenuSun')
+            console.log(restaurantNameId)
+            const getM = await getMenu(restaurantNameId)
             console.log(getM)
             if(getM){
                 setMenu(getM);

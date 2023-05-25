@@ -33,30 +33,36 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabOne'
 
     checkCurrentUser();
   }, []);
-    const handleLogin = async () => {
-      console.log("Tentative de connexion...");
-      let userEmail = email;
-      let userAuth = user;
-      if (!email.includes("@")) {
-        userEmail = await getEmailFromUsername(email);
-        userAuth = await getUserFromEmail(userEmail);
-        setUser(userAuth)
-        if (!userEmail) {
-          console.log("Nom d'utilisateur introuvable");
-          return;
-        }
+  const handleLogin = async () => {
+    console.log("Tentative de connexion...");
+    let userEmail = email;
+    let userAuth = user;
+    if (!email.includes("@")) {
+      userEmail = await getEmailFromUsername(email);
+      userAuth = await getUserFromEmail(userEmail);
+      setUser(userAuth)
+      if (!userEmail) {
+        console.log("Nom d'utilisateur introuvable");
+        return;
       }
-      await signInWithEmailAndPassword(auth, userEmail, password)
-        .then((userCredential) => {
-          console.log("Connexion réussie");
-          navigation.navigate('Menu', { user: userAuth, restaurantId: restaurant, restaurantNameId: restaurantId, numtable: numtable })
-          // setIsLoggedIn(true);
-        })
-        .catch((error) => {
-          const errorMessage = error.message;
-          console.log("Échec de la connexion :", errorMessage);
-        });
-    };
+    } else {
+      userAuth = await getUserFromEmail(email);
+    } 
+  
+    console.log(userAuth); // Make sure the userAuth object is correctly populated
+    
+    await signInWithEmailAndPassword(auth, userEmail, password)
+      .then((userCredential) => {
+        console.log("Connexion réussie");
+        navigation.navigate('Menu', { user: userAuth, restaurantId: restaurant, restaurantNameId: restaurantId, numtable: numtable });
+        // setIsLoggedIn(true);
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log("Échec de la connexion :", errorMessage);
+      });
+  };
+  
 
     const getEmailFromUsername = async (username) => {
       const q = query(collection(db, "users"), where("username", "==", username));

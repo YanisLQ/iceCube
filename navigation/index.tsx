@@ -24,6 +24,8 @@ import PanierScreen from '../screens/PanierScreen';
 import CommandeAdmin from '../screens/CommandeAdmin';
 import CardDetails from '../screens/CardDetails';
 import DishesScreen from '../screens/DishesScreen';
+import OrderPage from '../screens/ValidationCmd';
+import OrdersScreen from '../screens/orderScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -59,6 +61,8 @@ function RootNavigator() {
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="Profil" component={ProfileScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CommandeAdmin" component={CommandeAdmin} options={{ headerShown: false }} />
+      <Stack.Screen name="OrderConfirm" component={OrderPage} options={{ headerShown: false }} />
+      <Stack.Screen name="Orders" component={OrdersScreen} options={{ headerShown: false }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>

@@ -7,6 +7,7 @@ const getUserFromEmail = async (email) => {
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
         const user = querySnapshot.docs[0].data();
+        console.log(user)
         return user
     } else {
         return null;
@@ -63,5 +64,14 @@ const getCommandeForRestaurant = async (restaurantId) => {
     }
 }
 
-
+const ModifyStatusCommand = async (restaurantId) => {
+    const q = query(collection(db, "commandes"), where("restaurantNameId", "==", restaurantId), where("statutCommande", "==", "en préparation"))
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+        const commandes = querySnapshot.docs.map((doc) => doc.data());
+        return commandes;
+    } else {
+        return null;
+    }
+}
 export { getUserFromEmail, getMenu, getRestaurantId, getRestaurant, getCommandeForRestaurant };
