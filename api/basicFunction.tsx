@@ -64,6 +64,18 @@ const getCommandeForRestaurant = async (restaurantId) => {
     }
 }
 
+const getCommandeForCustomer = async (restaurantId, userId) => {
+    console.log(restaurantId + " restaurantid")
+    console.log(userId + " userid")
+    const q = query(collection(db, "commandes"), where("restaurantNameId", "==", restaurantId), where("userID", "==", userId))
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+        const commandes = querySnapshot.docs.map((doc) => doc.data());
+        return commandes;
+    } else {
+        return null;
+    }
+}
 const ModifyStatusCommand = async (restaurantId) => {
     const q = query(collection(db, "commandes"), where("restaurantNameId", "==", restaurantId), where("statutCommande", "==", "en préparation"))
     const querySnapshot = await getDocs(q);
@@ -74,4 +86,4 @@ const ModifyStatusCommand = async (restaurantId) => {
         return null;
     }
 }
-export { getUserFromEmail, getMenu, getRestaurantId, getRestaurant, getCommandeForRestaurant };
+export { getUserFromEmail, getMenu, getRestaurantId, getRestaurant, getCommandeForRestaurant, getCommandeForCustomer };
