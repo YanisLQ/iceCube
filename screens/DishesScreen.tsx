@@ -12,7 +12,7 @@ export default function DishesScreen({ navigation }: RootStackScreenProps<'Dishe
   const { addToPanier, getNombreElementsPanier,  } = useContext(PanierContext);
   const route = useRoute();
 
-  const { plats, user, restaurantId, restaurantNameId} = route.params;
+  const { plats, user, restaurantId, restaurantNameId, numtable} = route.params;
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const handleIngredientPress = (ingredient) => {
@@ -100,7 +100,7 @@ export default function DishesScreen({ navigation }: RootStackScreenProps<'Dishe
 
       {
         getNombreElementsPanier() != 0 && (
-        <TouchableOpacity onPress={() => navigation.navigate('Panier', {user: user, restaurantId: restaurantId, restaurantNameId: restaurantNameId})} style={styles.buttonStyle2}>
+        <TouchableOpacity onPress={() => navigation.navigate('Panier', {user: user, restaurantId: restaurantId, restaurantNameId: restaurantNameId, numtable: numtable})} style={styles.buttonStyle2}>
           <Text style={styles.buttonText}>Mon panier &#40;{getNombreElementsPanier()}&#41;</Text>
         </TouchableOpacity>
         )
@@ -112,8 +112,7 @@ export default function DishesScreen({ navigation }: RootStackScreenProps<'Dishe
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F6F6F6',
-    width: '100%',
-    height: '100%',
+    flex: 1
   },  textHeader: {
     position: 'absolute', 
     width: '100%',
@@ -128,13 +127,13 @@ const styles = StyleSheet.create({
   },
   dishDetails: {
     flexDirection: 'row',
-    padding: 16,
+    // padding: 16,
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#F6F6F6',
   },
-  imageContainer: {
-  
+  imageContainer: { 
+    
   },
   image: {
     width: 220,
@@ -143,13 +142,13 @@ const styles = StyleSheet.create({
     
   },
   txtImage: {
-    marginRight: 26,
+    marginRight: 35,
     textAlign: 'right',
     fontFamily: 'Inter_500Medium',
     fontSize: 18,
   },
   txtImage2: {
-    marginRight: 26,
+    marginRight: 35,
     textAlign: 'right',
     fontFamily: 'Inter_400Regular',
     fontSize: 14,

@@ -6,11 +6,12 @@ import { Route, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFirestore, collection, getDocs, setDoc, doc, getDoc, updateDoc  } from "firebase/firestore";
 import { db, auth } from '../firebase-config';
-
+import { getCommandeIdForRestaurant } from '../api/basicFunction';
 
 
 export default function CommandeAdmin({ navigation }) {
   const [commandes, setCommandes] = useState([]);
+  const [commandesId, setCommandesId] = useState([]);
   const route = useRoute();
   const { restaurantId, user } = route.params;
   useEffect(() => {
@@ -19,31 +20,39 @@ export default function CommandeAdmin({ navigation }) {
 
   const loadCommandes = async () => {
     const commandesData = await getCommandeForRestaurant(restaurantId);
+    const commandesId = await getCommandeIdForRestaurant(restaurantId);
     setCommandes(commandesData);
+    setCommandesId(commandesId);
   };
 
-  const handleChangeStatut = async (commandeId, nouveauStatut, item) => {
-    // try {
-    //     const commandesCollection = collection(db, "commandes", commandeId);
-    //     const commandeRef = doc(commandesCollection); // Generate an automatic ID for the document
-    //     await updateDoc(commandeRef, {
-    //       statutCommande: nouveauStatut,
-    //     });
+  const handleChangeStatut = async (commandeId, nouveauStatut, index) => {
+    try {
+      const commandesCollection = collection(db, "commandes");
+      const commandeRef = doc(commandesCollection, commandesId[index]); 
+      await updateDoc(commandeRef, { statutCommande: nouveauStatut });
   
-    //       console.log("modification effectué")
-    //   } catch (error) {
-    //     console.error("Erreur lors de l'ajout de la commande : ", error);
-    //   }
-    // console.log(item)
+      console.log("Modification effectuée");
+    } catch (error) {
+      console.error("Erreur lors de la modification de la commande : ", error);
+    }
+    
     loadCommandes();
   };
-
-  const renderItem = ({ item }) => (
+  
+  function getFirstFourLetters(str) {
+    if (str.length >= 4) {
+      return str.substring(0, 4);
+    } else {
+      return str;
+    }
+  }
+  
+  const renderItem = ({ item, index }) => (
     <TouchableOpacity
       style={styles.commandeItem}
       onPress={() => navigation.navigate('DétailsCommande', { commande: item })}
     >
-        <Text style={styles.commandeText}>Commande #{item.commandeId}</Text>
+        <Text style={styles.commandeText1}>Commande #{getFirstFourLetters(commandesId[index])}</Text>
         <Text style={styles.commandeText}>Statut: {item.statutCommande}</Text>
         {item.articles.map((article, index) => (
             <View key={index}>
@@ -69,7 +78,7 @@ export default function CommandeAdmin({ navigation }) {
 
       <TouchableOpacity
         style={styles.statutButton}
-        onPress={() => handleChangeStatut(item.commandeId, 'prêt')}
+        onPress={() => handleChangeStatut(item.commandeId, 'prêt', index)}
       >
         <Text style={styles.statutButtonText}>Prêt</Text>
       </TouchableOpacity>
@@ -122,6 +131,11 @@ const styles = StyleSheet.create({
   commandeText: {
     fontSize: 16,
     marginBottom: 8,
+  },
+  commandeText1: {
+    fontSize: 16,
+    marginBottom: 8,
+    textTransform: 'uppercase'
   },
   ingredientsTitle: {
     fontSize: 14,

@@ -54,6 +54,20 @@ const getRestaurant = async (restaurantId) => {
 }
 
 const getCommandeForRestaurant = async (restaurantId) => {
+    const commandes:any = []
+    const q = query(collection(db, "commandes"), where("restaurantNameId", "==", restaurantId), where("statutCommande", "==", "en préparation"))
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+        querySnapshot.docs.forEach(element => {
+            commandes.push(element.id)
+        });
+        return commandes;
+    } else {
+        return null;
+    }
+}
+
+const getCommandeIdForRestaurant = async (restaurantId) => {
     const q = query(collection(db, "commandes"), where("restaurantNameId", "==", restaurantId), where("statutCommande", "==", "en préparation"))
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {

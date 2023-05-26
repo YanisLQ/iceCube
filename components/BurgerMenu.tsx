@@ -42,18 +42,18 @@ const MenuButton = ({ navigation }) => {
       </TouchableOpacity>
       {isMenuOpen && (
         <View style={styles.menu}>
-          <TouchableOpacity onPress={() => handleMenuPress("ProfileScreen")} style={styles.menuItem}>
+          {/* <TouchableOpacity onPress={() => handleMenuPress("ProfileScreen")} style={styles.menuItem}>
             <Ionicons name="person" size={20} color="black" style={styles.menuIcon} />
             <Text style={styles.menuText}>Profil</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={() => navigation.navigate('Orders', {restaurantNameId: restaurantNameId, user: user})} style={styles.menuItem}>
             <Ionicons name="receipt" size={20} color="black" style={styles.menuIcon} />
             <Text style={styles.menuText}>Mes commandes</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleMenuPress("SettingsScreen")} style={styles.menuItem}>
+          {/* <TouchableOpacity onPress={() => handleMenuPress("SettingsScreen")} style={styles.menuItem}>
             <Ionicons name="settings" size={20} color="black" style={styles.menuIcon} />
             <Text style={styles.menuText}>Paramètres</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           { user.userRole == 1 && (
                 <TouchableOpacity onPress={() => handleShowCmd(navigation)} style={styles.menuItem}>
                   <FontAwesome name="cogs" size={20} color="black" style={styles.menuIcon} />

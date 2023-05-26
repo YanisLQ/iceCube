@@ -16,7 +16,7 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
   const { getNombreElementsPanier } = useContext(PanierContext);
 
   const route = useRoute();
-  const { id, user, restaurantId, restaurantNameId } = route.params;
+  const { id, user, restaurantId, restaurantNameId, numtable } = route.params;
   const goBack = () => {
     navigation.goBack();
   };
@@ -78,7 +78,7 @@ export default function CardDetails({navigation}: RootStackScreenProps<'CardDeta
         </View>
         <View style={styles.cardsContainer}>
           {filteredCards.map((card) => (
-            <TouchableOpacity key={card} style={styles.card} onPress={() => navigation.navigate('DishesScreen', {plats: card, user: user, restaurantId: restaurantId, restaurantNameId: restaurantNameId})}>
+            <TouchableOpacity key={card} style={styles.card} onPress={() => navigation.navigate('DishesScreen', {plats: card, user: user, restaurantId: restaurantId, restaurantNameId: restaurantNameId, numtable: numtable})}>
               <Text style={styles.cardTitle}>{card.nom}</Text>
               <View style={styles.tableContainer}>
               {card.ingredients.map((ingredient, index) => (

@@ -25,10 +25,20 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+        "build": {
+          "appBuildGradle": "android/app/build.gradle",
+          "outputDir": "android/app/build/outputs/apk"
+        },
+      "package": "com.yanisleclercq.IceCubedev"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "07edff34-f412-4dcf-ad1b-e30ba84fac3c"
+      }
     }
   }
 }

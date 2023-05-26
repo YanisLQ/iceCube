@@ -12,9 +12,8 @@ const windowWidth = Dimensions.width;
 const PanierScreen = ({ navigation }) => {
   const route = useRoute();
 
-  const { user, restaurantId, restaurantNameId } = route.params;
+  const { user, restaurantId, restaurantNameId, numtable } = route.params;
   const { panierItems, removeFromPanier, clearPanier, incrementQuantity, decrementQuantity, getNombreElementsPanier, getPrixTotalPanier } = useContext(PanierContext);
-  console.log(panierItems)
   const renderItem = ({ item }) => {
     const handleIncrement = () => {
       incrementQuantity(item.id);
@@ -68,7 +67,8 @@ const PanierScreen = ({ navigation }) => {
       });
 
         console.log("commande passé avec succès")
-        navigation.navigate('OrderConfirm', {panierItems: panierItems})
+        clearPanier()
+        navigation.navigate('OrderConfirm', {panierItems: panierItems, user: user, restaurantId: restaurantId, restaurantNameId: restaurantNameId, numtable: numtable})
     } catch (error) {
       console.error("Erreur lors de l'ajout de la commande : ", error);
     }

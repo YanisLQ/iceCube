@@ -3,19 +3,19 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react
 import { useRoute } from "@react-navigation/native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const OrderPage = () => {
+const OrderPage = ({navigation}) => {
   const [orderItems, setOrderItems] = useState([]);
   const route = useRoute();
 
-  const { panierItems } = route.params;
-
+  const { panierItems, user,restaurantId, restaurantNameId, numtable } = route.params;
+  console.log(user)
+  console.log(restaurantNameId)
   useEffect(() => {
     // Ici, vous pouvez appeler une fonction pour récupérer les détails de la commande
     // et mettre à jour l'état orderItems avec les données reçues
     setOrderItems(panierItems)
   }, []);
 
-  console.log(orderItems)
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <View style={styles.itemInfo}>
@@ -40,6 +40,11 @@ const OrderPage = () => {
           ) : (
               <Text>Aucune commande en cours</Text>
               )}
+            
+          <TouchableOpacity style={{width: '90%', height: 56, backgroundColor: '#F0604D', alignItems: 'center', justifyContent: 'center'}}
+            onPress={() => navigation.navigate('Menu', {user: user,restaurantId: restaurantId, restaurantNameId: restaurantNameId, numtable: numtable} )}>
+            <Text style={{fontFamily: "Inter_600SemiBold", color: 'white', }}>Retour au menu</Text>
+          </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -79,6 +84,7 @@ const styles = StyleSheet.create({
   },
   itemQuantity: {
     color: '#888888',
+    marginBottom: 8
   },
   itemImage: {
     width: 50,

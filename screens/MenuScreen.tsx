@@ -18,7 +18,6 @@ export default function HomeScreen({navigation}: RootStackScreenProps<'Menu'>) {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            console.log(restaurantNameId)
             const getM = await getMenu(restaurantNameId)
             console.log(getM)
             if(getM){

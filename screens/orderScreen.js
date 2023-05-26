@@ -36,7 +36,6 @@ const OrdersScreen = ({ navigation }) => {
           </View>
         );
     }
-    console.log(commandes[0].articles)
     return (
       <SafeAreaView style={styles.container}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 24, marginTop: 12 }}>
